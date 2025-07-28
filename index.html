@@ -1,0 +1,1030 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Supply Chain AI - Project Presentation</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            overflow-x: hidden;
+            animation: backgroundShift 20s ease-in-out infinite;
+        }
+
+        @keyframes backgroundShift {
+            0%, 100% { background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%); }
+            25% { background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%); }
+            50% { background: linear-gradient(135deg, #f9fbe7 0%, #f0f4c3 100%); }
+            75% { background: linear-gradient(135deg, #fce4ec 0%, #f8bbd9 100%); }
+        }
+
+        .presentation-container {
+            width: 100vw;
+            height: 100vh;
+            position: relative;
+        }
+
+        .slide {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            opacity: 0;
+            transform: translateX(100%) scale(0.9);
+            transition: all 1s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
+            color: #2c3e50;
+        }
+
+        .slide.active {
+            opacity: 1;
+            transform: translateX(0) scale(1);
+            animation: slideIn 0.8s ease-out;
+        }
+
+        .slide.prev {
+            transform: translateX(-100%) scale(0.9);
+        }
+
+        @keyframes slideIn {
+            0% { opacity: 0; transform: translateY(50px) scale(0.9); }
+            100% { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        .slide-content {
+            max-width: 1200px;
+            width: 100%;
+            text-align: center;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 25px;
+            padding: 3rem;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.8);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .slide-content::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            animation: shimmer 3s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+
+        .slide-title {
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, #667eea, #764ba2, #f093fb, #f5576c);
+            background-size: 400% 400%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: gradientShift 4s ease-in-out infinite;
+            position: relative;
+        }
+
+        @keyframes gradientShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        .slide-subtitle {
+            font-size: 1.5rem;
+            margin-bottom: 2rem;
+            color: #34495e;
+            animation: fadeInUp 1s ease-out 0.3s both;
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .team-member {
+            display: inline-block;
+            margin: 1rem;
+            padding: 2rem;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 20px;
+            color: white;
+            transition: all 0.4s ease;
+            transform: translateY(0);
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+            animation: floatIn 1s ease-out both;
+        }
+
+        .team-member:nth-child(odd) { animation-delay: 0.2s; }
+        .team-member:nth-child(even) { animation-delay: 0.4s; }
+
+        @keyframes floatIn {
+            from { opacity: 0; transform: translateY(50px) scale(0.8); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        .team-member:hover {
+            transform: translateY(-15px) scale(1.05);
+            box-shadow: 0 20px 40px rgba(102, 126, 234, 0.4);
+        }
+
+        .member-name {
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .member-id {
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .feature-card {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(240, 248, 255, 0.9));
+            border-radius: 20px;
+            padding: 2.5rem;
+            border: 2px solid rgba(102, 126, 234, 0.2);
+            transition: all 0.4s ease;
+            animation: cardFloat 1s ease-out both;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card:nth-child(1) { animation-delay: 0.1s; }
+        .feature-card:nth-child(2) { animation-delay: 0.2s; }
+        .feature-card:nth-child(3) { animation-delay: 0.3s; }
+        .feature-card:nth-child(4) { animation-delay: 0.4s; }
+
+        @keyframes cardFloat {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .feature-icon {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: iconPulse 2s ease-in-out infinite;
+        }
+
+        @keyframes iconPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        .workflow-step {
+            display: flex;
+            align-items: center;
+            margin: 1.5rem 0;
+            padding: 1.5rem;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(248, 250, 252, 0.9));
+            border-radius: 15px;
+            border-left: 5px solid #667eea;
+            transition: all 0.3s ease;
+            animation: stepSlide 0.8s ease-out both;
+        }
+
+        .workflow-step:nth-child(1) { animation-delay: 0.1s; }
+        .workflow-step:nth-child(2) { animation-delay: 0.2s; }
+        .workflow-step:nth-child(3) { animation-delay: 0.3s; }
+        .workflow-step:nth-child(4) { animation-delay: 0.4s; }
+
+        @keyframes stepSlide {
+            from { opacity: 0; transform: translateX(-50px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        .workflow-step:hover {
+            transform: translateX(10px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .step-number {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.2rem;
+            margin-right: 1.5rem;
+            animation: numberSpin 1s ease-out;
+        }
+
+        @keyframes numberSpin {
+            from { transform: rotate(-180deg) scale(0); }
+            to { transform: rotate(0deg) scale(1); }
+        }
+
+        .algorithm-details {
+            text-align: left;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .algorithm-step {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(248, 250, 252, 0.9));
+            margin: 1.5rem 0;
+            padding: 2rem;
+            border-radius: 15px;
+            border-left: 5px solid #f093fb;
+            animation: algorithmFade 0.8s ease-out both;
+            transition: all 0.3s ease;
+        }
+
+        .algorithm-step:nth-child(1) { animation-delay: 0.2s; }
+        .algorithm-step:nth-child(2) { animation-delay: 0.4s; }
+
+        @keyframes algorithmFade {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .algorithm-step:hover {
+            transform: scale(1.02);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+        }
+
+        .demo-image {
+            max-width: 100%;
+            height: auto;
+            border-radius: 15px;
+            margin: 1.5rem 0;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+            transition: all 0.4s ease;
+            animation: imageReveal 1s ease-out both;
+        }
+
+        @keyframes imageReveal {
+            from { opacity: 0; transform: scale(0.8); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .demo-image:hover {
+            transform: scale(1.05);
+            box-shadow: 0 20px 45px rgba(0, 0, 0, 0.3);
+        }
+
+        .image-gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .image-container {
+            position: relative;
+            overflow: hidden;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+            transition: all 0.4s ease;
+            animation: galleryFade 0.8s ease-out both;
+        }
+
+        .image-container:nth-child(1) { animation-delay: 0.1s; }
+        .image-container:nth-child(2) { animation-delay: 0.2s; }
+        .image-container:nth-child(3) { animation-delay: 0.3s; }
+        .image-container:nth-child(4) { animation-delay: 0.4s; }
+        .image-container:nth-child(5) { animation-delay: 0.5s; }
+
+        @keyframes galleryFade {
+            from { opacity: 0; transform: translateY(30px) scale(0.9); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        .image-container:hover {
+            transform: scale(1.05) rotate(1deg);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
+        }
+
+        .image-label {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
+            color: white;
+            padding: 1rem;
+            font-weight: 600;
+            transform: translateY(100%);
+            transition: transform 0.3s ease;
+        }
+
+        .image-container:hover .image-label {
+            transform: translateY(0);
+        }
+
+        .navigation {
+            position: fixed;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 1rem;
+            z-index: 1000;
+        }
+
+        .nav-btn {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border: none;
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            font-weight: 600;
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+        }
+
+        .nav-btn:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 15px 35px rgba(102, 126, 234, 0.4);
+        }
+
+        .slide-indicator {
+            position: fixed;
+            top: 2rem;
+            right: 2rem;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            padding: 1rem 1.5rem;
+            border-radius: 25px;
+            color: white;
+            font-weight: bold;
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+            animation: indicatorPulse 2s ease-in-out infinite;
+        }
+
+        @keyframes indicatorPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .tech-stack {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+
+        .tech-item {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 0.8rem 1.5rem;
+            border-radius: 25px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            animation: techFloat 0.8s ease-out both;
+        }
+
+        .tech-item:nth-child(odd) { animation-delay: 0.1s; }
+        .tech-item:nth-child(even) { animation-delay: 0.2s; }
+
+        @keyframes techFloat {
+            from { opacity: 0; transform: translateY(20px) scale(0.8); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        .tech-item:hover {
+            transform: translateY(-5px) scale(1.1);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        .chart-container {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            margin: 2rem 0;
+        }
+
+        .chart {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(248, 250, 252, 0.9));
+            padding: 2rem;
+            border-radius: 20px;
+            margin: 1rem;
+            min-width: 300px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+            animation: chartRise 1s ease-out both;
+        }
+
+        .chart:nth-child(1) { animation-delay: 0.2s; }
+        .chart:nth-child(2) { animation-delay: 0.4s; }
+
+        @keyframes chartRise {
+            from { opacity: 0; transform: translateY(50px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .chart-title {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: 600;
+        }
+
+        .bar {
+            height: 25px;
+            background: linear-gradient(90deg, #667eea, #764ba2, #f093fb);
+            background-size: 200% 100%;
+            margin: 0.8rem 0;
+            border-radius: 15px;
+            transition: all 2s ease;
+            animation: barGlow 3s ease-in-out infinite;
+            display: flex;
+            align-items: center;
+            padding: 0 1rem;
+            color: white;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        @keyframes barGlow {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        .member-section {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(248, 250, 252, 0.95));
+            border-radius: 20px;
+            padding: 2rem;
+            margin: 1rem 0;
+            border: 2px solid rgba(102, 126, 234, 0.2);
+            animation: sectionSlide 0.8s ease-out both;
+        }
+
+        .member-section:nth-child(1) { animation-delay: 0.1s; }
+        .member-section:nth-child(2) { animation-delay: 0.3s; }
+        .member-section:nth-child(3) { animation-delay: 0.5s; }
+
+        @keyframes sectionSlide {
+            from { opacity: 0; transform: translateX(-30px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        .member-header {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 15px;
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+            font-weight: 600;
+        }
+
+        .floating-particles {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            border-radius: 50%;
+            animation: floatParticle 15s linear infinite;
+        }
+
+        @keyframes floatParticle {
+            0% { transform: translateY(100vh) translateX(0) rotate(0deg); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(-10vh) translateX(100px) rotate(360deg); opacity: 0; }
+        }
+
+        @media (max-width: 768px) {
+            .slide-title {
+                font-size: 2.5rem;
+            }
+            
+            .slide-content {
+                padding: 2rem;
+            }
+            
+            .feature-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .image-gallery {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="presentation-container">
+        <!-- Floating Particles -->
+        <div class="floating-particles" id="particles"></div>
+
+        <!-- Slide 1: Title -->
+        <div class="slide active" id="slide1">
+            <div class="slide-content">
+                <h1 class="slide-title">
+                    <i class="fas fa-robot"></i> Supply Chain AI
+                </h1>
+                <p class="slide-subtitle">Intelligent Supply Chain Management & Predictive Analytics</p>
+                <div class="team-member">
+                    <div class="member-name">Prof. Umar Iftikahar</div>
+                    <div class="member-id">Instructor</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 2: Team Members -->
+        <div class="slide" id="slide2">
+            <div class="slide-content">
+                <h1 class="slide-title">Our Team</h1>
+                <div class="team-member">
+                    <div class="member-name">Malik Alina</div>
+                    <div class="member-id">024</div>
+                </div>
+                <div class="team-member">
+                    <div class="member-name">Kashaf Saleem</div>
+                    <div class="member-id">025</div>
+                </div>
+                <div class="team-member">
+                    <div class="member-name">Fatimah Rameen</div>
+                    <div class="member-id">023</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 3: Malik Alina's Section - Project Overview -->
+        <div class="slide" id="slide3">
+            <div class="slide-content">
+                <div class="member-header">
+                    <i class="fas fa-user"></i> Malik Alina (024) - Project Overview
+                </div>
+                <h1 class="slide-title">Project Overview</h1>
+                <p class="slide-subtitle">Revolutionizing Supply Chain Management with AI</p>
+                <div class="feature-grid">
+                    <div class="feature-card">
+                        <i class="fas fa-upload feature-icon"></i>
+                        <h3>Data Upload</h3>
+                        <p>Upload CSV files containing supply chain data for analysis</p>
+                    </div>
+                    <div class="feature-card">
+                        <i class="fas fa-chart-line feature-icon"></i>
+                        <h3>Predictive Analytics</h3>
+                        <p>AI-powered predictions for delivery delays and supplier risks</p>
+                    </div>
+                    <div class="feature-card">
+                        <i class="fas fa-shield-alt feature-icon"></i>
+                        <h3>Risk Assessment</h3>
+                        <p>Comprehensive risk scoring for suppliers and supply chain optimization</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 4: Malik Alina's Section - Complete Workflow -->
+        <div class="slide" id="slide4">
+            <div class="slide-content">
+                <div class="member-header">
+                    <i class="fas fa-user"></i> Malik Alina (024) - System Workflow
+                </div>
+                <h1 class="slide-title">Complete Workflow</h1>
+                <div class="workflow-step">
+                    <div class="step-number">1</div>
+                    <div>
+                        <h3>Data Upload</h3>
+                        <p>Users upload CSV files containing supplier data, delivery dates, and quantities</p>
+                    </div>
+                </div>
+                <div class="workflow-step">
+                    <div class="step-number">2</div>
+                    <div>
+                        <h3>Data Processing</h3>
+                        <p>Backend processes and validates the uploaded data</p>
+                    </div>
+                </div>
+                <div class="workflow-step">
+                    <div class="step-number">3</div>
+                    <div>
+                        <h3>AI Analysis</h3>
+                        <p>Machine learning algorithms analyze patterns and predict outcomes</p>
+                    </div>
+                </div>
+                <div class="workflow-step">
+                    <div class="step-number">4</div>
+                    <div>
+                        <h3>Results Dashboard</h3>
+                        <p>Interactive dashboard displays predictions, risk assessments, and insights</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 5: Kashaf Saleem's Section - AI Algorithm Details -->
+        <div class="slide" id="slide5">
+            <div class="slide-content">
+                <div class="member-header">
+                    <i class="fas fa-user"></i> Kashaf Saleem (025) - AI Algorithm Details
+                </div>
+                <h1 class="slide-title">AI Algorithm Details</h1>
+                <div class="algorithm-details">
+                    <div class="algorithm-step">
+                        <h3><i class="fas fa-brain"></i> Machine Learning Pipeline</h3>
+                        <p>• <strong>Data Preprocessing:</strong> Clean and normalize supply chain data</p>
+                        <p>• <strong>Feature Engineering:</strong> Extract delivery patterns, supplier performance metrics</p>
+                        <p>• <strong>Predictive Models:</strong> Linear regression and time series analysis for delay prediction</p>
+                        <p>• <strong>Risk Scoring:</strong> Multi-factor risk assessment algorithm</p>
+                    </div>
+                    <div class="algorithm-step">
+                        <h3><i class="fas fa-cogs"></i> Algorithm Components</h3>
+                        <p>• <strong>Delay Prediction:</strong> Analyzes historical delivery data to predict future delays</p>
+                        <p>• <strong>Supplier Performance:</strong> Calculates reliability scores based on delivery accuracy</p>
+                        <p>• <strong>Risk Assessment:</strong> Evaluates supplier risk using multiple factors</p>
+                        <p>• <strong>Optimization Suggestions:</strong> Recommends supply chain improvements</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 6: Kashaf Saleem's Section - Usage & Features -->
+        <div class="slide" id="slide6">
+            <div class="slide-content">
+                <div class="member-header">
+                    <i class="fas fa-user"></i> Kashaf Saleem (025) - Usage & Features
+                </div>
+                <h1 class="slide-title">Usage & Features</h1>
+                <div class="feature-grid">
+                    <div class="feature-card">
+                        <i class="fas fa-user-shield feature-icon"></i>
+                        <h3>User Authentication</h3>
+                        <p>Secure login and registration system with role-based access</p>
+                    </div>
+                    <div class="feature-card">
+                        <i class="fas fa-file-csv feature-icon"></i>
+                        <h3>CSV Upload</h3>
+                        <p>Simple drag-and-drop interface for data upload</p>
+                    </div>
+                    <div class="feature-card">
+                        <i class="fas fa-history feature-icon"></i>
+                        <h3>Upload History</h3>
+                        <p>Track all uploaded files and their processing status</p>
+                    </div>
+                    <div class="feature-card">
+                        <i class="fas fa-chart-bar feature-icon"></i>
+                        <h3>Interactive Dashboards</h3>
+                        <p>Real-time charts and visualizations of supply chain data</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 7: Fatimah Rameen's Section - Demo Screenshots -->
+        <div class="slide" id="slide7">
+            <div class="slide-content">
+                <div class="member-header">
+                    <i class="fas fa-user"></i> Fatimah Rameen (023) - Application Demo
+                </div>
+                <h1 class="slide-title">Application Screenshots</h1>
+                <p class="slide-subtitle">Real-world interface showcasing our AI-powered system</p>
+                <div class="image-gallery">
+                    <div class="image-container">
+                        <img src="output1.png" alt="Login Interface" class="demo-image">
+                        <div class="image-label">Login Interface</div>
+                    </div>
+                    <div class="image-container">
+                        <img src="output2.png" alt="Dashboard Overview" class="demo-image">
+                        <div class="image-label">Dashboard Overview</div>
+                    </div>
+                    <div class="image-container">
+                        <img src="output3.png" alt="Data Upload" class="demo-image">
+                        <div class="image-label">Data Upload</div>
+                    </div>
+                    <div class="image-container">
+                        <img src="output4.png" alt="Analytics Charts" class="demo-image">
+                        <div class="image-label">Analytics Charts</div>
+                    </div>
+                    <div class="image-container">
+                        <img src="output5.png" alt="Risk Assessment" class="demo-image">
+                        <div class="image-label">Risk Assessment</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 8: Fatimah Rameen's Section - Technical Stack -->
+        <div class="slide" id="slide8">
+            <div class="slide-content">
+                <div class="member-header">
+                    <i class="fas fa-user"></i> Fatimah Rameen (023) - Technical Stack
+                </div>
+                <h1 class="slide-title">Technical Stack</h1>
+                <div class="tech-stack">
+                    <div class="tech-item">
+                        <i class="fab fa-react"></i> React.js
+                    </div>
+                    <div class="tech-item">
+                        <i class="fab fa-node-js"></i> Node.js
+                    </div>
+                    <div class="tech-item">
+                        <i class="fas fa-database"></i> MongoDB
+                    </div>
+                    <div class="tech-item">
+                        <i class="fab fa-js"></i> JavaScript
+                    </div>
+                    <div class="tech-item">
+                        <i class="fab fa-css3-alt"></i> Tailwind CSS
+                    </div>
+                    <div class="tech-item">
+                        <i class="fas fa-chart-line"></i> Chart.js
+                    </div>
+                    <div class="tech-item">
+                        <i class="fas fa-brain"></i> Machine Learning
+                    </div>
+                    <div class="tech-item">
+                        <i class="fas fa-cloud"></i> Vercel Deployment
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 9: Results & Analytics -->
+        <div class="slide" id="slide9">
+            <div class="slide-content">
+                <h1 class="slide-title">Results & Analytics</h1>
+                <div class="chart-container">
+                    <div class="chart">
+                        <h3 class="chart-title">Delivery Delays by Supplier</h3>
+                        <div class="bar" style="width: 20%;">TechCorp: 2 days</div>
+                        <div class="bar" style="width: 85%;">FastTech: 8.5 days</div>
+                        <div class="bar" style="width: 75%;">ScreenMakers: 7.5 days</div>
+                        <div class="bar" style="width: 15%;">DisplayTech: 0.5 days</div>
+                        <div class="bar" style="width: 25%;">InputCo: 2.5 days</div>
+                    </div>
+                    <div class="chart">
+                        <h3 class="chart-title">Risk Assessment Scores</h3>
+                        <div class="bar" style="width: 20%;">TechCorp: 20%</div>
+                        <div class="bar" style="width: 85%;">FastTech: 85%</div>
+                        <div class="bar" style="width: 70%;">ScreenMakers: 70%</div>
+                        <div class="bar" style="width: 15%;">DisplayTech: 15%</div>
+                        <div class="bar" style="width: 25%;">InputCo: 25%</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 10: Conclusion -->
+        <div class="slide" id="slide10">
+            <div class="slide-content">
+                <h1 class="slide-title">Conclusion</h1>
+                <div class="feature-grid">
+                    <div class="feature-card">
+                        <i class="fas fa-rocket feature-icon"></i>
+                        <h3>Innovation</h3>
+                        <p>Revolutionary AI-powered supply chain management system</p>
+                    </div>
+                    <div class="feature-card">
+                        <i class="fas fa-chart-line feature-icon"></i>
+                        <h3>Predictive Power</h3>
+                        <p>Accurate predictions for delivery delays and supplier risks</p>
+                    </div>
+                    <div class="feature-card">
+                        <i class="fas fa-users feature-icon"></i>
+                        <h3>User-Friendly</h3>
+                        <p>Intuitive interface for seamless supply chain management</p>
+                    </div>
+                    <div class="feature-card">
+                        <i class="fas fa-lightbulb feature-icon"></i>
+                        <h3>Future Ready</h3>
+                        <p>Scalable architecture for enterprise-level deployment</p>
+                    </div>
+                </div>
+                <div style="margin-top: 2rem; padding: 2rem; background: linear-gradient(135deg, #667eea, #764ba2); color: white; border-radius: 20px; animation: conclusionGlow 2s ease-in-out infinite alternate;">
+                    <p style="font-size: 1.5rem; font-weight: 600;">
+                        <i class="fas fa-heart"></i> Thank You!
+                    </p>
+                    <p style="font-size: 1.1rem; margin-top: 0.5rem;">
+                        Questions & Discussion Welcome
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Navigation -->
+        <div class="navigation">
+            <button class="nav-btn" onclick="prevSlide()">
+                <i class="fas fa-chevron-left"></i> Previous
+            </button>
+            <button class="nav-btn" onclick="nextSlide()">
+                Next <i class="fas fa-chevron-right"></i>
+            </button>
+        </div>
+
+        <!-- Slide Indicator -->
+        <div class="slide-indicator">
+            <span id="currentSlide">1</span> / <span id="totalSlides">10</span>
+        </div>
+    </div>
+
+    <script>
+        let currentSlide = 1;
+        const totalSlides = 10;
+
+        // Create floating particles
+        function createParticles() {
+            const particlesContainer = document.getElementById('particles');
+            for (let i = 0; i < 20; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 15 + 's';
+                particle.style.animationDuration = (15 + Math.random() * 10) + 's';
+                particlesContainer.appendChild(particle);
+            }
+        }
+
+        function showSlide(slideNumber) {
+            // Hide all slides
+            document.querySelectorAll('.slide').forEach((slide, index) => {
+                slide.classList.remove('active', 'prev');
+                if (index + 1 < slideNumber) {
+                    slide.classList.add('prev');
+                }
+            });
+
+            // Show current slide
+            const currentSlideElement = document.getElementById(`slide${slideNumber}`);
+            currentSlideElement.classList.add('active');
+
+            // Update indicator
+            document.getElementById('currentSlide').textContent = slideNumber;
+
+            // Trigger specific animations for certain slides
+            if (slideNumber === 7) {
+                setTimeout(() => {
+                    document.querySelectorAll('.image-container').forEach((container, index) => {
+                        setTimeout(() => {
+                            container.style.transform = 'scale(1.02)';
+                            setTimeout(() => {
+                                container.style.transform = 'scale(1)';
+                            }, 200);
+                        }, index * 100);
+                    });
+                }, 500);
+            }
+
+            if (slideNumber === 9) {
+                setTimeout(() => {
+                    animateBars();
+                }, 800);
+            }
+        }
+
+        function nextSlide() {
+            if (currentSlide < totalSlides) {
+                currentSlide++;
+                showSlide(currentSlide);
+            }
+        }
+
+        function prevSlide() {
+            if (currentSlide > 1) {
+                currentSlide--;
+                showSlide(currentSlide);
+            }
+        }
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' || e.key === ' ') {
+                e.preventDefault();
+                nextSlide();
+            } else if (e.key === 'ArrowLeft') {
+                e.preventDefault();
+                prevSlide();
+            }
+        });
+
+        // Auto-animate bars on slide 9
+        function animateBars() {
+            const bars = document.querySelectorAll('.bar');
+            bars.forEach((bar, index) => {
+                const width = bar.style.width;
+                bar.style.width = '0%';
+                setTimeout(() => {
+                    bar.style.width = width;
+                    bar.style.transform = 'scaleY(1.1)';
+                    setTimeout(() => {
+                        bar.style.transform = 'scaleY(1)';
+                    }, 300);
+                }, index * 200 + 500);
+            });
+        }
+
+        // Add hover effects to navigation buttons
+        document.querySelectorAll('.nav-btn').forEach(btn => {
+            btn.addEventListener('mouseenter', () => {
+                btn.style.transform = 'translateY(-3px) scale(1.05)';
+            });
+            btn.addEventListener('mouseleave', () => {
+                btn.style.transform = 'translateY(0) scale(1)';
+            });
+        });
+
+        // Add pulse effect to slide indicator
+        setInterval(() => {
+            const indicator = document.querySelector('.slide-indicator');
+            indicator.style.transform = 'scale(1.1)';
+            setTimeout(() => {
+                indicator.style.transform = 'scale(1)';
+            }, 200);
+        }, 3000);
+
+        // Initialize
+        createParticles();
+        showSlide(1);
+
+        // Add glow effect to conclusion
+        const conclusionGlow = document.querySelector('[style*="conclusionGlow"]');
+        if (conclusionGlow) {
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes conclusionGlow {
+                    from { box-shadow: 0 0 30px rgba(102, 126, 234, 0.5); }
+                    to { box-shadow: 0 0 50px rgba(118, 75, 162, 0.7); }
+                }
+            `;
+            document.head.appendChild(style);
+        }
+
+        // Add auto-play functionality (optional)
+        let autoPlay = false;
+        let autoPlayInterval;
+
+        function toggleAutoPlay() {
+            if (autoPlay) {
+                clearInterval(autoPlayInterval);
+                autoPlay = false;
+            } else {
+                autoPlayInterval = setInterval(() => {
+                    if (currentSlide < totalSlides) {
+                        nextSlide();
+                    } else {
+                        currentSlide = 1;
+                        showSlide(1);
+                    }
+                }, 5000);
+                autoPlay = true;
+            }
+        }
+
+        // Add keyboard shortcut for auto-play (press 'A')
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'a' || e.key === 'A') {
+                toggleAutoPlay();
+            }
+        });
+    </script>
+</body>
+</html>
